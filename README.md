@@ -107,14 +107,6 @@
 	x spark-4.1.1-bin-hadoop3-connect/bin/docker-image-tool.sh
 	x spark-4.1.1-bin-hadoop3-connect/bin/spark-shell
 
-	→ ls -l
-	total 1147120
-	drwxr-xr-x@  5 81045729  staff        160 Mar 14 19:53 code
-	drwxr-xr-x@  4 81045729  staff        128 Mar 14 19:53 data
-	-rw-r--r--@  1 81045729  staff       1874 Mar 14 19:53 README.md
-	drwxr-xr-x@ 17 81045729  staff        544 Jan  2 17:55 spark-4.1.1-bin-hadoop3-connect
-	-rw-r--r--@  1 81045729  staff  572746775 Mar 14 20:03 spark-4.1.1-bin-hadoop3-connect.tgz
-
 	→ mv spark-4.1.1-bin-hadoop3-connect/ ../../spark/
 
 	→ ls -l ~/Documents/spark/
@@ -163,24 +155,24 @@
 
 ### Troubleshooting
 1. `spark-submit --version` returns the below error:
-		```shell
-		→ spark-submit --version  
-		Exception in thread "main" java.lang.UnsupportedClassVersionError: org/apache/spark/launcher/Main has been compiled by a more recent version of the Java Runtime (class file version 61.0), this version of the Java Runtime only recognizes class file versions up to 52.0
-			at java.lang.ClassLoader.defineClass1(Native Method)
-			at java.lang.ClassLoader.defineClass(ClassLoader.java:756)
-			at java.security.SecureClassLoader.defineClass(SecureClassLoader.java:142)
-			at java.net.URLClassLoader.defineClass(URLClassLoader.java:473)
-			at java.net.URLClassLoader.access$100(URLClassLoader.java:74)
-			at java.net.URLClassLoader$1.run(URLClassLoader.java:369)
-			at java.net.URLClassLoader$1.run(URLClassLoader.java:363)
-			at java.security.AccessController.doPrivileged(Native Method)
-			at java.net.URLClassLoader.findClass(URLClassLoader.java:362)
-			at java.lang.ClassLoader.loadClass(ClassLoader.java:418)
-			at sun.misc.Launcher$AppClassLoader.loadClass(Launcher.java:371)
-			at java.lang.ClassLoader.loadClass(ClassLoader.java:351)
-			at sun.launcher.LauncherHelper.checkAndLoadMain(LauncherHelper.java:642)
-		/Users/81045729/Documents/spark-4.1.1-bin-hadoop3-connect//bin/spark-class: line 97: CMD: bad array subscript
-		```
+	```shell
+	→ spark-submit --version  
+	Exception in thread "main" java.lang.UnsupportedClassVersionError: org/apache/spark/launcher/Main has been compiled by a more recent version of the Java Runtime (class file version 61.0), this version of the Java Runtime only recognizes class file versions up to 52.0
+		at java.lang.ClassLoader.defineClass1(Native Method)
+		at java.lang.ClassLoader.defineClass(ClassLoader.java:756)
+		at java.security.SecureClassLoader.defineClass(SecureClassLoader.java:142)
+		at java.net.URLClassLoader.defineClass(URLClassLoader.java:473)
+		at java.net.URLClassLoader.access$100(URLClassLoader.java:74)
+		at java.net.URLClassLoader$1.run(URLClassLoader.java:369)
+		at java.net.URLClassLoader$1.run(URLClassLoader.java:363)
+		at java.security.AccessController.doPrivileged(Native Method)
+		at java.net.URLClassLoader.findClass(URLClassLoader.java:362)
+		at java.lang.ClassLoader.loadClass(ClassLoader.java:418)
+		at sun.misc.Launcher$AppClassLoader.loadClass(Launcher.java:371)
+		at java.lang.ClassLoader.loadClass(ClassLoader.java:351)
+		at sun.launcher.LauncherHelper.checkAndLoadMain(LauncherHelper.java:642)
+	/Users/81045729/Documents/spark-4.1.1-bin-hadoop3-connect//bin/spark-class: line 97: CMD: bad array subscript
+	```
 
 	* This usually indicates a mismatch in Java versions, in this case, Spark 4.1.1 is compiled for Java 17 (class file version 61) but our `spark-submit` was running with Java 8 (class file version 52), so we needed to install Java 17+ and make sure Spark uses that JDK. To verify your java version, run the below command:
 		```shell
