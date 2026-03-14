@@ -36,6 +36,36 @@
 	- LegacyKeyValueFormat: "ENV key=value" should be used instead of legacy "ENV key value" format (line 14)
 	- LegacyKeyValueFormat: "ENV key=value" should be used instead of legacy "ENV key value" format (line 15)
 	```
+* Now we need to configure Spark to use Kubernetes as its cluster manager. Create a `spark-defaults.conf` file in your Spark configuration directory:
+	```shell
+	→ cp $SPARK_HOME/conf/spark-defaults.conf.template $SPARK_HOME/conf/spark-defaults.conf
+	```
+* Add the following configurations to this file:
+	```text
+	spark.master k8s://https://<kubernetes-api-server-url>
+	spark.kubernetes.container.image <your-spark-image>
+	spark.kubernetes.namespace spark
+	spark.kubernetes.authenticate.driver.serviceAccountName spark
+	spark.kubernetes.authenticate.executor.serviceAccountName spark
+	```
+* Note that we already have the `spark-rbac.yaml` file in our repo, we just need to apply it to create a service account & role binding for Spark:
+	```shell
+	→ kubectl apply -f spark-rbac.yaml
+	serviceaccount/spark created
+	clusterrolebinding.rbac.authorization.k8s.io/spark-role created
+	```
+* Now we are ready to submit one of examples to the cluster:
+	```
+	$SPARK_HOME/bin/spark-submit \
+		--master k8s://https://127.0.0.1:6443 \
+		 --deploy-mode cluster \
+		 --name spark-pi \
+		 --class org.apache.spark.examples.SparkPi \
+		 --conf spark.executor.instances=3 \
+		 --conf spark.kubernetes.container.image=spark:v4.1.1 \
+		--conf spark.kubernetes.namespace=spark \
+		local:///spark/examples/jars/spark-examples_2.12-3.5.2.jar
+	```
 
 ### Setting up Spark on local (MacOS) (Relevant as on March 14, 2026):
 
@@ -85,9 +115,9 @@
 	drwxr-xr-x@ 17 81045729  staff        544 Jan  2 17:55 spark-4.1.1-bin-hadoop3-connect
 	-rw-r--r--@  1 81045729  staff  572746775 Mar 14 20:03 spark-4.1.1-bin-hadoop3-connect.tgz
 
-	→ mv spark-4.1.1-bin-hadoop3-connect/ ../../
+	→ mv spark-4.1.1-bin-hadoop3-connect/ ../../spark/
 
-	→ ls -l ~/Documents/spark-4.1.1-bin-hadoop3-connect/
+	→ ls -l ~/Documents/spark/
 	total 176
 	drwxr-xr-x@  31 81045729  staff    992 Jan  2 17:55 bin
 	drwxr-xr-x@   9 81045729  staff    288 Jan  2 17:55 conf
@@ -105,6 +135,12 @@
 	drwxr-xr-x@  21 81045729  staff    672 Jan  2 17:55 sbin
 	drwxr-xr-x@   3 81045729  staff     96 Jan  2 17:55 yarn
 	```
+* Add the below entries to your `.bash_rc` or `.zshrc` file, as applicable:
+	```
+	export SPARK_HOME="~/Documents/spark/"
+	export PATH=$PATH:$SPARK_HOME/bin
+	```
+
 * Now verify that spark is working as expected:
 	```shell
 	→ spark-submit --version
@@ -188,7 +224,7 @@
 	* Now instead of changing the global `JAVA_HOME`, we played it safe by simply pointing Spark to Java 17. To do this:
 		* Navigate to the Spark directory & create a new `spark-env.sh` if it does not exist:
 			```shell
-			→ cd ../../spark-4.1.1-bin-hadoop3-connect/
+			→ cd ../../spark/
 			→ cp conf/spark-env.sh.template conf/spark-env.sh
 			```
 		* Add the below entries to your `conf/spark-env.sh` and save it:
