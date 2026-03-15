@@ -152,7 +152,9 @@
 			```
 		* Add the below entries to your `conf/spark-env.sh` and save it:
 			```shell
-			export JAVA_HOME=$(/usr/libexec/java_home -v 17)
+			if [ -x /usr/libexec/java_home ]; then
+                export JAVA_HOME=$(/usr/libexec/java_home -v 17)
+            fi
 			```
 	
 	* Now Spark should work as expected:

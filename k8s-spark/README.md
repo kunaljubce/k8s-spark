@@ -42,11 +42,18 @@
 	```
 * Add the following configurations to this file:
 	```text
-	spark.master k8s://https://<kubernetes-api-server-url> # Run `kubectl get cluster-info` -> Kubernetes control plane is running at <kubernetes-api-server-url>
-	spark.kubernetes.container.image <your-spark-image> # In this case, the spark image would be `spark:v4.1.1` as mentioned during `docker build ...`
+	spark.master k8s://https://<kubernetes-api-server-url>   # Run `kubectl get cluster-info` -> Kubernetes control plane is running at <kubernetes-api-server-url>
+	spark.kubernetes.container.image <your-spark-image>      # In this case, the spark image would be `spark:v4.1.1` as mentioned during `docker build ...`
 	spark.kubernetes.namespace spark
 	spark.kubernetes.authenticate.driver.serviceAccountName spark
 	spark.kubernetes.authenticate.executor.serviceAccountName spark
+    spark.eventLog.enabled                                     true
+    spark.eventLog.dir                                         file:///mnt/spark-event-logs
+
+    spark.kubernetes.driver.volumes.persistentVolumeClaim.spark-event-log-pvc.mount.path       /mnt/spark-event-logs
+    spark.kubernetes.driver.volumes.persistentVolumeClaim.spark-event-log-pvc.options.claimName spark-event-log-pvc
+    spark.kubernetes.executor.volumes.persistentVolumeClaim.spark-event-log-pvc.mount.path       /mnt/spark-event-logs
+    spark.kubernetes.executor.volumes.persistentVolumeClaim.spark-event-log-pvc.options.claimName spark-event-log-pvc
 	```
 * Note that we already have the K8s service level declarations inside `k8s-spark/` dir in our repo, we just need to apply all of them to create a service account, role binding, PVC, and a history server for Spark:
 	```shell
