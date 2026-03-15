@@ -1,26 +1,12 @@
 ## Table of Contents
-1. [Setting up Spark on K8s](#setting-up-spark-on-k8s-relevant-as-on-march-14-2026)
+1. [Motivation](#motivation)
 2. [Setting up Spark on local](https://github.com/kunaljubce/k8s-spark/blob/main/local-spark/README.md)
+3. [Setting up Spark on K8s](https://github.com/kunaljubce/k8s-spark/blob/main/k8s-spark/README.md)
+4. [Projects](https://github.com/kunaljubce/k8s-spark/blob/main/projects/README.md)
 
+### Motivation
+I've always found setting up Spark on a local system, in a truly distributed fashion, to be daunting task because of the scattered documentations, not to mention the complexity of managing Spark on K8s itself. This repo is my attempt to streamline the process of spinning up a Spark cluster on local or on Kubernetes, with the ultimate aim of providing my fellow data engineers and Spark users with a bare metal experience of Spark, a niche skill fading away in the age of cloud datawarehouses and services like Snowflake & Databricks. 
 
+### Use case
+As I update this repository with more information, I will be using the same resources and configurations to develop Spark projects on my local k8s-spark cluster to run distributed processes on Spark, investigate the history server UI for optimisation, and much more. 
 
-
-
-
-
-### hadoop-and-pyspark-projects
-This is a placeholder for all my Hadoop projects including PySpark, Hive, Kafka etc. The files and folders are named in a way that helps identifying the corresponding code and data easily. Forexample, for the code transactions.py, there is a folder named transactions under /data which contains all necessary datasets used for the code.
-
-Project 1 - To identify:
-		a) All transactions for each account that have the same transaction_source and same transaction_amount in both months
-		b) All accounts that have transactions in either month but not both.
-The datasets are for the months August and September and have 2000 records each. The code is written in PySpark. The logic is implemented using RDDs, without resorting to the use of DataFrames.
-
-Project 2 - This project is done to analyse the data for a large retail chain based in US. The purpose of this project is to identify the KPIs and analyse them to help reduce fraud and also get deeper business insights. For this reason, we have taken into account a subset of the orders data, products data, customers data and departments data.
-No Personally Indentifiable Information (PII) has been used to analyse the datasets. We are trying to determine the following:
-		- find the state-wise distribution of customers i.e. number of customers from each state
-		- find all unique customer details for suspected fraud transactions (orders.paymentStatus = SUSPECTED_FRAUD)
-		- find total amount and total number of orders for each of value of paymentStatus
-		- find number of products that are from the brands - Nike, Adidas, Reebok, Puma, Majestic, Under Armour and Fitbit
-		- find the number of products that below to different price ranges i.e. $0-$20, $20-$40 etc. Use dataframes for this.
-		- find the productId, productDescription and price of the top 20 highest and lowest selling items
