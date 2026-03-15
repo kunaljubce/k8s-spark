@@ -42,8 +42,8 @@
 	```
 * Add the following configurations to this file:
 	```text
-	spark.master k8s://https://<kubernetes-api-server-url>
-	spark.kubernetes.container.image <your-spark-image>
+	spark.master k8s://https://<kubernetes-api-server-url> # Run `kubectl get cluster-info` -> Kubernetes control plane is running at <kubernetes-api-server-url>
+	spark.kubernetes.container.image <your-spark-image> # In this case, the spark image would be `spark:v4.1.1` as mentioned during `docker build ...`
 	spark.kubernetes.namespace spark
 	spark.kubernetes.authenticate.driver.serviceAccountName spark
 	spark.kubernetes.authenticate.executor.serviceAccountName spark
@@ -56,15 +56,15 @@
 	```
 * Now we are ready to submit one of examples to the cluster:
 	```
-	$SPARK_HOME/bin/spark-submit \
+	$SPARK_HOME/bin/spark-submit \                             
 		--master k8s://https://127.0.0.1:6443 \
-		 --deploy-mode cluster \
-		 --name spark-pi \
-		 --class org.apache.spark.examples.SparkPi \
-		 --conf spark.executor.instances=3 \
-		 --conf spark.kubernetes.container.image=spark:v4.1.1 \
+		--deploy-mode cluster \
+		--name spark-pi \
+		--class org.apache.spark.examples.SparkPi \
+		--conf spark.executor.instances=3 \
+		--conf spark.kubernetes.container.image=spark:v4.1.1 \
 		--conf spark.kubernetes.namespace=spark \
-		local:///spark/examples/jars/spark-examples_2.12-3.5.2.jar
+		local:///spark/examples/jars/spark-examples_2.13-4.1.1.jar
 	```
 
 ### Setting up Spark on local (MacOS) (Relevant as on March 14, 2026):
